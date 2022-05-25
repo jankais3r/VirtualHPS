@@ -28,13 +28,43 @@ I wasn't able to gather much about the inner workings or the purpose behind this
 
 ## Setup
 ### Requirements
+- Make sure that in macOS' Display Preferences you have "Default for Display" selected for the Looking Glass display
 - VM hypervisor capable of using multiple monitors. Tried and tested using [Parallels Desktop](https://www.parallels.com).
+- In the Parallels VM options enable:
+  - Options > Full Screen > Use all displays in full screen
+  - Hardware > Graphics > Best for external displays 
 - For [non-Portait screens](https://lookingglassfactory.com/product/overview) you need to install [HoloPlay Service](https://lookingglassfactory.com/software) in order to be able to pull the calibration data on first use.
 
 ### Video guide
 <a href="https://www.youtube.com/watch?v=ql9mcvMc3l8"><img src="https://github.com/jankais3r/VirtualHPS/raw/main/img/youtube.png" width="600"></a>
 
+### Portrait setup
+1) Once your Windows VM is booted up, pass through the Portrait's mass storage device. It contains a calibration file from factory that VirtualHPS utilizes. No further setup needed.
 
+### Non-Portrait setup
+1) Non-Portrait LG screens do not have a mass storage, therefore we have to manually supply calibration values on first run of VirtualHPS.
+2) To get the values, make sure that HoloPlay Service on your computer can see the display, and then paste the following code into your web browser's JavaScript console:
+```javascript
+var ws = new WebSocket('ws://localhost:11222/'); ws.onmessage = function(event){alert(event.data)}
+```
+
+_This doesn't work in Safari, so use Firefox, Brave or any other Chromium-based browser._
+
+Alternatively, you can visit [https://eka.hn/calibration_test.html](https://eka.hn/calibration_test.html) and copy the provided JSON straight from the website.
+
+3) On first launch of VirtualHPS enter the copied calibration data.
+
+### Debugging
+Launch VirtualHPS.exe from a command line to receive debugging message.
+
+<a href="https://www.youtube.com/watch?v=ql9mcvMc3l8"><img src="https://github.com/jankais3r/VirtualHPS/raw/main/img/debug.png" width="600"></a>
+
+
+### Windows-based holo apps
+To find some very cool Windows holo apps, look at the following places:
+1) [Made With](https://madewith.lookingglassfactory.com/?filter=apps) website
+2) [Library App](https://docs.lookingglassfactory.com/legacy-products/software/library) store
+3) [Official Looking Glass Factory](https://discordapp.com/invite/ZW87Y4m) Discord server
 
 ### Disclaimer
 This work is not affiliated with Looking Glass Factory, Inc.
