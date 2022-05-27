@@ -12,6 +12,10 @@
 	<!--<RuntimeIdentifier>win-arm64</RuntimeIdentifier>-->
 	<Platforms>ARM64;x64</Platforms>
 	<ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
+	<NeutralLanguage>en-US</NeutralLanguage>
+	<Version>1.0.1</Version>
+	<AssemblyVersion>1.0.1</AssemblyVersion>
+	<FileVersion>1.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

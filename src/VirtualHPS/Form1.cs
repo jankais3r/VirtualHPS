@@ -13,6 +13,8 @@ namespace VirtualHPS
     {
         public static string calibrationFile = "calibration.txt";
         public static string calibrationString = "";
+        public static bool resolutionOverride = false;
+        public static int resolutionOverrideScreenId = 999;
     }
 
     public partial class Form1 : Form
@@ -249,9 +251,9 @@ namespace VirtualHPS
                 try
                 {
                     var cborObj = CBORObject.FromJSONString(CalibrationPath.calibrationString);
-                    if (validDisplays.Contains(resolution))
+                    if (validDisplays.Contains(resolution) || (CalibrationPath.resolutionOverride && CalibrationPath.resolutionOverrideScreenId == selectedScreen))
                     {
-                        if (scaling == "100%")
+                        if (scaling == "100%" || CalibrationPath.resolutionOverride && CalibrationPath.resolutionOverrideScreenId == selectedScreen)
                         {
                             string legacyCalibrationFolder = @"C:\LKG_calibration";
                             string legacyCalibrationFile = legacyCalibrationFolder + @"\visual.json";
@@ -282,7 +284,9 @@ namespace VirtualHPS
                     }
                     else
                     {
-                        MessageBox.Show("Selected screen's resolution does not match any known holographic display model.");
+                        MessageBox.Show("Selected screen's resolution does not match any known holographic display model.\n\nConfirm this screen again to bypass the resolution check.");
+                        CalibrationPath.resolutionOverride = true;
+                        CalibrationPath.resolutionOverrideScreenId = selectedScreen;
                     }
                 }
                 catch (Exception ex)
