@@ -5,6 +5,15 @@ Looking Glass HoloPlayService replacement for virtual machines without direct ac
   <img src="https://github.com/jankais3r/VirtualHPS/raw/main/img/VirtualHPS.png" width="200">
 </p>
 
+## Content
+* [Introduction](#the-problem)
+* [HoloPlay API Variants](#holoplay-api-variants)
+* [Setup](#setup)
+* [Alternative use-cases](#alternative-use-cases)
+* [Debugging](#debugging)
+* [Windows-based holo apps](#windows-based-holo-apps)
+
+
 ### The problem
 The official [HoloPlay Service](https://learn.lookingglassfactory.com/onboarding/4) relies on a direct, low-level connection to the screen in order pull its lenticular lens calibration values over USB/HDMI. When we run HoloPlay Service in a virtual machine, it cannot reach the hardware, as the Looking Glass display is presented to the guest OS as a `Generic PnP Monitor` without any special properties.
 
@@ -20,7 +29,7 @@ This method is used by Unity apps built using the oldest HoloPlay SDK. Each app 
 This is the current way that modern Unity, UE and HoloPlayCore apps get access to calibration data. The [NNG](https://nng.nanomsg.org)-based [CBOR](https://cbor.io)-encoded inter-process endpoint is available at `ipc:///tmp/holoplay-driver.ipc`. Besides the lens calibration data this endpoint also provides render window location, which is why modern apps like the [HoloPlay Studio](https://learn.lookingglassfactory.com/onboarding/6) don't ask you to manually choose a display.
 
 #### 3) Standard websocket ✅
-This enpoint exists to enable [Holoplay.js/Three.js](https://docs.lookingglassfactory.com/developer-tools/three) integration in web browsers. I was debating whether to include this in VirtualHPS as web apps can be ran on any platform and therefore there is no obvious benefit to running them in a virtual machine. Eventually I included it because it didn't take much effort to implement and it might be useful to somebody. This API endpoint runs at the address `ws://127.0.0.1:11222/`.
+This enpoint exists to enable [Holoplay.js/Three.js](https://docs.lookingglassfactory.com/developer-tools/three) integration in web browsers. I was debating whether to include this in VirtualHPS as web apps can be run on any platform and therefore there is no obvious benefit to running them in a virtual machine. Eventually I included it because it didn't take much effort to implement and it might be useful to somebody. This API endpoint runs at the address `ws://127.0.0.1:11222/`.
 
 #### 3) NNG websocket ☑️
 I wasn't able to gather much about the inner workings or the purpose behind this special websocket, besided the fact that it runs at `ws://127.0.0.1:11222/driver` and uses the `rep.sp.nanomsg.org` websocket subprotocol. Currently not implemented in VirtualHPS.
@@ -54,11 +63,18 @@ Alternatively, you can visit [https://eka.hn/calibration_test.html](https://eka.
 
 3) On first launch of VirtualHPS enter the copied calibration data.
 
+### Alternative use-cases
+My primary motivation for developing VirtualHPS was to allow the use of Looking Glass displays with applications running within virtual machines. However, there are at least two other cases where it might come handy:
+#### 1) Render farms
+You might want to pre-render large amount of content for your display. VirtualHPS v1.0.1 added an option to render to a regular display, so you no longer have to have Looking Glass connected to the rendering machine. This allows to render volumetric scenes on multiple machines at the same time.
+
+#### 2) Multiple display management
+Let's say you are a museum with 20 Looking Glass displays all over the exhibition floor. These displays play pre-rendered videos from network-connected thin clients. Every time you wanted to update the content in the past, you had to physically fetch each of the 20 screens and connect them to your computer one by one in order to have the calibration data available. With VirtualHPS that is no longer necessary. Create a `calibration.txt` file once for each of the displays and use them to render the content without the need to plug in each of the displays.
+
 ### Debugging
 Launch VirtualHPS.exe from a command line to receive debug messages.
 
 <img src="https://github.com/jankais3r/VirtualHPS/raw/main/img/debug.png" width="600">
-
 
 ### Windows-based holo apps
 If you are looking for some cool Windows holo apps, check out the following links:
